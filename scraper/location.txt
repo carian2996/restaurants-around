@@ -1,2 +1,3 @@
 [location]
-address = "Avenida Revolución 258, Tacubaya, Mexico City, CDMX"
+url = https://www.ubereats.com/mx
+address = Avenida Revolución 258, Tacubaya, Mexico City, CDMX
