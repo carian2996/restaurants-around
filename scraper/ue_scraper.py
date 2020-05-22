@@ -26,37 +26,40 @@ if __name__ == '__main__':
         # Reading address from text file
         config = configparser.ConfigParser()
         config.read(sys.argv[1])
+        
         ADDRESS = config['location']['address']
+        URL = config['location']['url']
+        OUTPUT = config['location']['output']
+        
         print(str(datetime.now()), '- Looking for resturants in:')
         print('\n', ADDRESS, '\n')
 
         # TODO: /mx is particular for Mexico, I need to adapt this part
         # based on input address rather than a fixed value
 
-        # Iniate driver in URL
-        URL = config['location']['url']
+        # Initiate driver in URL
         driver.get(URL)
         
-        time.sleep(3) # from time to tim I'll wait a cuple of seconds
+        time.sleep(5) # from time to tim I'll wait a cuple of seconds
         print(str(datetime.now()), '- Input address...')
         # Looking for input combobox in main page
         location_input = driver.find_element_by_id('location-typeahead-home-input')
         location_input.send_keys(ADDRESS)
 
-        time.sleep(3)
+        time.sleep(5)
         print(str(datetime.now()), '- Searching restaurants...')
         # Sending keys to establish the ADDRESS
         search_button = driver.find_element_by_xpath('//button[text()="Buscar comida"]')
         search_button.click()
 
-        time.sleep(3)
+        time.sleep(5)
         # Once our ADDRESS was inputed, we need all restaurants around there
 
         # TODO: Apparently /near-me is generic and independent from the city or address
         # I'm good with this, but vulnerable...
         driver.get(URL+'/near-me')
 
-        time.sleep(3)
+        time.sleep(5)
         print(str(datetime.now()), '- Retriving food categories...')
         # Uber Eats groups restaurants near you in food categories
         categories = driver.find_elements_by_xpath('//a[@href]')
@@ -73,6 +76,7 @@ if __name__ == '__main__':
         
         data = {}
         for h in categories_hrefs:
+            time.sleep(10)
             cate = h.replace(URL + '/near-me/', '')
 
             data[cate] = {}
@@ -80,19 +84,19 @@ if __name__ == '__main__':
             time.sleep(5)
             data[cate]['web_href'] = h.replace('https://www.ubereats.com', '')
 
-            time.sleep(3)
+            time.sleep(5)
             # FIXED: Some elements can be unavailable at moments, adding an try-expection
             try:
                 # I iterate for all categories available and go to another page
                 driver.find_element_by_xpath("//a[@href='" + data[cate]['web_href'] + "']").click()
                 
             except Exception as e:
-                print('Element', data[cate]['web_href'], 'is not clickable at point')
+                print('\n'+'Element', data[cate]['web_href'], 'is not clickable at point')
                 continue
 
             data[cate]['restaurants'] = {}
             
-            time.sleep(3)
+            time.sleep(5)
             print('\n' + str(datetime.now()), '- Looking restaurants for:', cate, '\n')
             # Same process... lots of links, I only need links ot get restaurant's data
             restaurants = driver.find_elements_by_xpath("//a[@href]")
@@ -112,7 +116,7 @@ if __name__ == '__main__':
             driver.back()
 
         print('\n')
-        with open('data.json', 'w', encoding='utf8') as f: 
+        with open(OUTPUT, 'w', encoding='utf8') as f: 
             json.dump(data, f, ensure_ascii=False)
 
         print(str(datetime.now()), '- Done!')
