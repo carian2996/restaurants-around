@@ -1,4 +1,4 @@
 [location]
 url = https://www.ubereats.com/mx
 address = Avenida Revolución 258, Tacubaya, Mexico City, CDMX
-output = revolucion.json
+output = revolucion_detailed.json
