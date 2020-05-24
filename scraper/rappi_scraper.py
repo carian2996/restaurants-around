@@ -37,7 +37,7 @@ if __name__ == '__main__':
         catalog = json.loads(post_catalog.text)
         N_RESTOS = len(catalog['stores'])
 
-        print(str(datetime.now()), '- Number of restaurants retrived:', N_RESTOS)
+        print(str(datetime.now()), '- Restaurants retrived:', N_RESTOS)
 
         CUISINES = {}
         for tag in catalog['tags']: CUISINES[tag['id']] = tag['name']
@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
             if 'name' in details.keys(): 
                 data[resto_id]['name'] = details['name']
-                print(data[resto_id]['name'])
+                print(n+'.', data[resto_id]['name'])
             
             if 'tags' in details.keys(): 
                 servesCuisine = []
