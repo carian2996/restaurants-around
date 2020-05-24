@@ -1,4 +1,5 @@
 # I/O modules
+from parser.parser import parse
 import configparser
 import json
 
@@ -82,6 +83,10 @@ if __name__ == '__main__':
         with open('./data/rappi_'+OUTPUT, 'w', encoding='utf8') as f: 
             json.dump(data, f, ensure_ascii=False)
 
+        df = parse(data, 'rappi')
+        if df is not None:
+            df.to_csv(('./data/ue_'+OUTPUT).resplace('json', 'csv'))
+        
         print(str(datetime.now()), '- Done!')
     
     else:

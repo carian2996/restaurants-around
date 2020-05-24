@@ -2041,3 +2041,11 @@ scraper-env/lib/python3.8/site-packages/requests-2.23.0.dist-info/RECORD
 scraper-env/lib/python3.8/site-packages/requests-2.23.0.dist-info/top_level.txt
 scraper-env/lib/python3.8/site-packages/requests-2.23.0.dist-info/WHEEL
 restaurants_around.code-workspace
+
+scraper-env/
+
+notebooks/.ipynb_checkpoints/
+
+scraper/.ipynb_checkpoints/
+
+scraper/__pycache__/

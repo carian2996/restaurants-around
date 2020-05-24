@@ -1,6 +1,8 @@
 # I/O modules
-import json
+from parser.parser import parse
 import configparser
+import json
+import csv
 
 # Scraping tools
 from selenium import webdriver
@@ -135,6 +137,10 @@ if __name__ == '__main__':
         print('\n')
         with open('./data/ue_'+OUTPUT, 'w', encoding='utf8') as f: 
             json.dump(data, f, ensure_ascii=False)
+
+        df = parse(data, 'eats')
+        if df is not None:
+            df.to_csv(('./data/ue_'+OUTPUT).resplace('json', 'csv'))
 
         driver.quit()
         print(str(datetime.now()), '- Done!')
