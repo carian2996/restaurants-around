@@ -31,7 +31,7 @@ if __name__ == '__main__':
         URL = config['location']['url']
         OUTPUT = config['location']['output']
         
-        print(str(datetime.now()), '- Looking for resturants in:')
+        print(str(datetime.now()), '- Looking for restaurants in:')
         print('\n', ADDRESS, '\n')
 
         # TODO: /mx is particular for Mexico, I need to adapt this part
@@ -40,7 +40,7 @@ if __name__ == '__main__':
         # Initiate driver in URL
         driver.get(URL)
         
-        time.sleep(5) # from time to tim I'll wait a cuple of secon3s
+        time.sleep(5) # from time to tim I'll wait a couple of second3s
         print(str(datetime.now()), '- Input address...')
         # Looking for input combobox in main page
         location_input = driver.find_element_by_id('location-typeahead-home-input')
@@ -53,7 +53,7 @@ if __name__ == '__main__':
         search_button.click()
 
         time.sleep(3)
-        # Once our ADDRESS was inputed, we need all restaurants around there
+        # Once our ADDRESS was inputted, we need all restaurants around there
 
         # TODO: Apparently /near-me is generic and independent from the city or address
         # I'm good with this, but vulnerable...
@@ -133,7 +133,7 @@ if __name__ == '__main__':
                     raise print(e)
         
         print('\n')
-        with open('./data/'+OUTPUT, 'w', encoding='utf8') as f: 
+        with open('./data/ue_'+OUTPUT, 'w', encoding='utf8') as f: 
             json.dump(data, f, ensure_ascii=False)
 
         driver.quit()
