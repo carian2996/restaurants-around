@@ -57,7 +57,11 @@ if __name__ == '__main__':
             if 'tags' in details.keys(): 
                 servesCuisine = []
                 for tag in details['tags']:
-                    servesCuisine.append(CUISINES[tag])
+                    try:
+                        cuisine = CUISINES[tag]
+                    except Exception as e:
+                        pass
+                    servesCuisine.append(cuisine)
                 data[resto_id]['servesCuisine'] = servesCuisine
             
             if 'location' in details.keys(): data[resto_id]['geo'] = details['location']
