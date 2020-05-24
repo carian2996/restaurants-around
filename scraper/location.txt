@@ -1,6 +1,6 @@
 [location]
 url = https://www.ubereats.com/mx
-address = Nicolas Leon 173, Jardin Balbuena, Mexico City, CDMX
-latitude = 19.4145066
-longitude = -99.1110241
-output = balbuena.json
+address = Avenida Revolucion 258, Tacubaya, Mexico City, CDMX
+latitude = 19.3987204
+longitude = -99.184695
+output = revolucion258.json

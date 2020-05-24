@@ -7,7 +7,7 @@ def parse(json, platform):
         data = json
         df = pd.DataFrame(list(data.keys()), columns=['id'])
 
-        ids, resto_name, lat, lng, cuisine = [[] for _ in range(6)]
+        ids, resto_name, lat, lng, cuisine = [[] for _ in range(5)]
 
         for r in df.id:
             if len(data[r]) == 0: continue

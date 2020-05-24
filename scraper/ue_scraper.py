@@ -6,6 +6,7 @@ import csv
 
 # Scraping tools
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
 # Utilities
@@ -18,6 +19,7 @@ from datetime import datetime
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument("--incognito")
 chrome_options.add_argument('--disable-dev-shm-usage')
 
 if __name__ == '__main__':
@@ -54,7 +56,7 @@ if __name__ == '__main__':
         # Sending keys to establish the ADDRESS
         search_button = driver.find_element_by_xpath('//button[text()="Buscar comida"]')
         search_button.click()
-        time.sleep(5)
+        time.sleep(10)
 
         # TODO: Apparently /near-me path is not showing all restos. I'll change this 
         # to use restaurants displayed by the Feed end point. Feed doesn't show all
@@ -64,7 +66,7 @@ if __name__ == '__main__':
             try:
                 more_button = driver.find_element_by_xpath('//button[text()="Mostrar más"]')
                 more_button.click()
-                time.sleep(5)
+                time.sleep(10)
             except NoSuchElementException:
                 more_exist = False
             
@@ -73,17 +75,23 @@ if __name__ == '__main__':
         restaurants_hrefs = list(dict.fromkeys(restaurants_hrefs))
         
         N_RESTOS = len(restaurants_hrefs)
+        if N_RESTOS == 0: raise print('No restaurants found')
         print(str(datetime.now()), '- Restaurants retrived:', N_RESTOS)
         
         data = {}
         for n, r in enumerate(restaurants_hrefs, start=1):
             try:
-                # Visit restaurant page to get detailed data
-                driver.get(r)
-                time.sleep(5)
-                
                 # TODO: Only works for Mexico City. Removes random identifier at the end
                 resto_id = r.replace(URL + '/mexico-city/food-delivery/', '').split('/')[0]
+                
+                # Visit restaurant page to get detailed data
+                try:
+                    driver.get(r)
+                except Exception as e:
+                    print('Unable to reach:', resto_id)
+                    pass
+                time.sleep(5)
+                
                 data[resto_id] = {}
                 
                 try:
@@ -114,7 +122,7 @@ if __name__ == '__main__':
 
         df = parse(data, 'eats')
         if df is not None:
-            df.to_csv(('./data/ue_'+OUTPUT).resplace('json', 'csv'))
+            df.to_csv(('./data/ue_'+OUTPUT).replace('json', 'csv'), index=False)
 
         driver.quit()
         print(str(datetime.now()), '- Done!')

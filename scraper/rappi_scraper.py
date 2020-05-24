@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
         df = parse(data, 'rappi')
         if df is not None:
-            df.to_csv(('./data/ue_'+OUTPUT).resplace('json', 'csv'))
+            df.to_csv(('./data/rappi_'+OUTPUT).replace('json', 'csv'), index=False)
         
         print(str(datetime.now()), '- Done!')
     
