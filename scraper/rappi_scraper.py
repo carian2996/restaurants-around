@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
             if 'name' in details.keys(): 
                 data[resto_id]['name'] = details['name']
-                print(n+'.', data[resto_id]['name'])
+                print(str(n)+'.', data[resto_id]['name'])
             
             if 'tags' in details.keys(): 
                 servesCuisine = []

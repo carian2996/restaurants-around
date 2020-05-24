@@ -88,7 +88,7 @@ if __name__ == '__main__':
                     script = driver.find_element_by_xpath("//script[@type='application/ld+json']")
                     details = json.loads(script.get_attribute('innerHTML'))
 
-                    print(n+'.', details['name'])
+                    print(str(n)+'.', details['name'])
                     
                     if 'name' in details.keys(): data[resto_id]['name'] = details['name']
                     if 'servesCuisine' in details.keys(): data[resto_id]['servesCuisine'] = details['servesCuisine']
