@@ -13,9 +13,9 @@ def parse(json, platform):
             if len(data[r]) == 0: continue
             ids.append(r)
             resto_name.append(data[r]['name'])
+            cuisine.append(', '.join(data[r]['servesCuisine']))
             lat.append(data[r]['geo'][0])
             lng.append(data[r]['geo'][1])
-            cuisine.append(', '.join(data[r]['servesCuisine']))
 
         features = pd.DataFrame({'id': ids, 'name': resto_name, 'lat': lat, 'lng': lng, 'cuisine': cuisine})
         df = df.merge(features)

@@ -65,7 +65,7 @@ if __name__ == '__main__':
                     servesCuisine.append(cuisine)
                 data[resto_id]['servesCuisine'] = servesCuisine
             
-            if 'location' in details.keys(): data[resto_id]['geo'] = details['location']
+            if 'location' in details.keys(): data[resto_id]['geo'] = list(reversed(details['location']))
             if 'price_range' in details.keys(): data[resto_id]['priceRange'] = details['price_range']
             if 'address' in details.keys(): data[resto_id]['address'] = details['address']
             if 'telephone' in details.keys(): data[resto_id]['telephone'] = ''
