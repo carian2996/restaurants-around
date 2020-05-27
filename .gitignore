@@ -7,3 +7,7 @@ scraper/__pycache__/
 scraper/parser/__pycache__/
 scraper-venv/
 
+.vscode/settings.json
+.vscode/
+
+main/__pycache__/
