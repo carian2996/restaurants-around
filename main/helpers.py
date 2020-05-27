@@ -52,7 +52,7 @@ def get_neighbors(df, rings=1):
             
     return(df)
 
-def find_dups(df, slang, threshold=0.5, ngram=2, hex_res=12, includes_hex_platform=True, includes_hex=False):
+def find_dups(df, slang, threshold=0.5, ngram=2, hex_res=12, includes_hex_platform=False, includes_hex=False):
     df_aux = df.reset_index(drop=True).copy()
     
     df_aux['name'] = df_aux.name.str.lower()

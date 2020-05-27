@@ -17,10 +17,20 @@ street_slang = [
 
 if __name__ == "__main__":
     
-    rappi = pd.read_csv('../scraper/data/rappi_revolucion258_noon.csv')
     eats = pd.read_csv('../scraper/data/ue_revolucion258_noon.csv')
+    rappi = pd.read_csv('../scraper/data/rappi_revolucion258_noon.csv')
 
     RES = 12
+
+    same_names = list(set(eats.name).intersection(set(rappi.name)))
+    
+    df_same_names = eats[eats.name.isin(same_names)].copy().reset_index(drop=True)
+    df_restos = df_same_names.drop_duplicates(subset=['name']).reset_index(drop=True)
+    df_restos['platform'] = 'both'
+    df_restos = df_restos[['id', 'platform', 'name', 'lat', 'lng']]
+    
+    eats = eats[~eats.name.isin(same_names)].copy().reset_index(drop=True)
+    rappi = rappi[~rappi.name.isin(same_names)].copy().reset_index(drop=True)
 
     df_eats_hexes = build_hexes(eats, RES)
     df_rappi_hexes = build_hexes(rappi, RES)
@@ -81,8 +91,8 @@ if __name__ == "__main__":
     df_no_neighbors_dups = find_dups(
         df_no_neighbors
         , street_slang
-        , ngram=2
-        , threshold=0.45
+        , ngram=5
+        , threshold=0.35
         , includes_hex=True
         )   
 
@@ -109,9 +119,9 @@ if __name__ == "__main__":
     df_with_neighbors_dups = find_dups(
         df_with_neighbors
         , street_slang
-        , ngram=2
-        , threshold=0.5
-        )   
+        , ngram=5
+        , threshold=0.35
+        ) 
 
     df_unique_with_neighbors = df_with_neighbors.merge(
         get_uniques(df_with_neighbors_dups)
@@ -124,7 +134,7 @@ if __name__ == "__main__":
     df_restos_with_neighbors = df_unique_with_neighbors[['uuid', 'name']].merge(all_restos[['name', 'lat', 'lng']])
     df_restos_with_neighbors = give_format(df_restos_with_neighbors)
 
-    df_restos = pd.concat([df_restos_no_neighbors, df_restos_with_neighbors])
+    df_restos = pd.concat([df_restos, df_restos_no_neighbors, df_restos_with_neighbors])
     df_restos = df_restos.sort_values('id').reset_index(drop=True)
     df_restos.to_csv('unique_restos.csv', header=True, index=False)
     print('Done!')
