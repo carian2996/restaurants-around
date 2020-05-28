@@ -2,8 +2,8 @@
 An easy way to analyze restaurants around you...
 
 ## How to Use:
-1. Be sure to install of `./requirements.txt`. Work better inside a `venv`.
-2. Modify `./scraper/location.txt` with `address` and `latitude` and `longitude` of your delivery address (home, office, etc.).
+1. Be sure to install of `./requirements.txt`. Works better inside a `venv`.
+2. Modify `./scraper/location.txt` with `address`, `latitude` and `longitude` of your delivery address (home, office, etc.).
 3. In your command line, run: `python3 ue_scraper.py location.txt` or `python3 rappi_scraper.py location.txt` to get two files, a `json` file with raw data containing all restaurant data and a `csv` file with data parsed. Feel free to modify `./scraper/parser/parser.py` if you want to include more columns from the `json` file.
 4. Once data gather, execute the `./main/unique_restaurants.py` file to get a de-duplicated list of restaurants from Uber Eats and Rappi.
 
