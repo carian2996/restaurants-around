@@ -2,6 +2,7 @@
 from parser.parser import parse
 import configparser
 import json
+import os
 
 # Utilities
 import sys
@@ -80,6 +81,8 @@ if __name__ == '__main__':
             if 'schedules' in details.keys(): data[resto_id]['openingHoursSpecification'] = details['schedules']
     
         print('\n')
+
+        if not os.path.exists('./data'): os.mkdir('./data')
         with open('./data/rappi_'+OUTPUT, 'w', encoding='utf8') as f: 
             json.dump(data, f, ensure_ascii=False)
 

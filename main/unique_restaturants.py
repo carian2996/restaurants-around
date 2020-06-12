@@ -1,9 +1,11 @@
+import os
 import json
 import string
 import pandas as pd
 
 from h3 import h3
 from helpers import *
+
 
 # TODO: Where should I place this?
 street_slang = [
@@ -17,8 +19,8 @@ street_slang = [
 
 if __name__ == "__main__":
     
-    eats = pd.read_csv('../scraper/data/ue_revolucion258_noon.csv')
-    rappi = pd.read_csv('../scraper/data/rappi_revolucion258_noon.csv')
+    eats = pd.read_csv('../scraper/data/eats_revolucion258.csv')
+    rappi = pd.read_csv('../scraper/data/rappi_revolucion258.csv')
 
     RES = 12
 
@@ -91,8 +93,8 @@ if __name__ == "__main__":
     df_no_neighbors_dups = find_dups(
         df_no_neighbors
         , street_slang
-        , ngram=5
-        , threshold=0.35
+        , ngram=2
+        , threshold=0.5
         , includes_hex=True
         )   
 
@@ -119,8 +121,8 @@ if __name__ == "__main__":
     df_with_neighbors_dups = find_dups(
         df_with_neighbors
         , street_slang
-        , ngram=5
-        , threshold=0.35
+        , ngram=2
+        , threshold=0.5
         ) 
 
     df_unique_with_neighbors = df_with_neighbors.merge(
@@ -136,5 +138,5 @@ if __name__ == "__main__":
 
     df_restos = pd.concat([df_restos, df_restos_no_neighbors, df_restos_with_neighbors])
     df_restos = df_restos.sort_values('id').reset_index(drop=True)
-    df_restos.to_csv('unique_restos.csv', header=True, index=False)
+    df_restos.to_csv('unique_restos2.csv', header=True, index=False)
     print('Done!')

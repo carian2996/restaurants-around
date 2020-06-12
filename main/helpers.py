@@ -1,6 +1,19 @@
+import os
 import re
 import numpy as np
 import pandas as pd
+
+import shapefile
+from h3 import h3
+
+from json import dumps, loads
+from folium import Map, Marker, GeoJson, Popup, FeatureGroup
+from folium.map import LayerControl
+from geojson import FeatureCollection, Feature
+
+from shapely.geometry import Point
+from shapely.geometry.polygon import Polygon
+from geopy.distance import geodesic
 
 from scipy.sparse import csr_matrix
 from nltk.corpus import stopwords
@@ -8,6 +21,66 @@ import sparse_dot_topn.sparse_dot_topn as ct
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from h3.h3 import geo_to_h3, h3_to_geo_boundary, k_ring_distances
+
+
+def shape2json(
+    shp_path
+    , center=None
+    , data=None
+    , attributes=None
+    , entidad='09'
+    , shp_encode='ISO8859-1'
+    , properties=['CODIGO', 'CVEGEO', 'GEOGRAFICO', 'FECHAACT', 'GEOMETRIA', 'INSTITUCIO', 'OID']
+    , outfile='mexico_city.json'):
+    
+    shp_file = shapefile.Reader(shp_path, encoding=shp_encode)
+
+    fields = shp_file.fields[1:]
+    field_names = [field[0] for field in fields]
+
+    shape_data = []
+    for sr in shp_file.shapeRecords():
+        atr = dict(zip(field_names, sr.record))
+        geom = sr.shape.__geo_interface__
+        if sr.record[field_names.index('CVEGEO')][:2] == entidad:
+            if data is not None:
+                for a in attributes:
+                    atr[a] = str(data.loc[sr.record[field_names.index('CVEGEO')], a])
+            if center is not None: 
+                ageb_poly = Polygon([[p[1], p[0]] for p in geom['coordinates'][0]])
+                ageb_center = (ageb_poly.centroid.coords.xy[0][0], ageb_poly.centroid.coords.xy[1][0])
+                distance = round(geodesic(center, ageb_center).km, 2)
+                if 8.0 < distance: continue
+            
+            shape_data.append(dict(type='Feature', geometry=geom, properties=atr))
+
+
+    for record in shape_data:
+        for key in properties:
+            record['properties'][key] = record['properties'][key]
+
+    collection = dumps(FeatureCollection(shape_data), indent=2)
+    with open(outfile, "w") as geojson: geojson.write(collection + "\n")    
+    
+    return(collection)
+
+
+def build_hex_feature(feature_id, hx, res_hx, platform=None, figure_type='Polygon'):
+    feature = Feature(
+        geometry = {
+            'type' : figure_type
+            , 'coordinates': [h3.h3_to_geo_boundary(h3_address=hx, geo_json=True)]
+        }
+        , id = feature_id
+        , properties = {
+            'id': feature_id
+            , 'resolution': int(res_hx)
+            , 'platform': platform
+        }
+    )
+    
+    return(feature)
+
 
 def build_hexes(df, hex_res, create_geom=False):
     cols = ['id', 'platform', 'lat', 'lng']
