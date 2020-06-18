@@ -11,7 +11,6 @@ from folium import Map, Marker, GeoJson, Popup, FeatureGroup
 from folium.map import LayerControl
 from geojson import FeatureCollection, Feature
 
-from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 from geopy.distance import geodesic
 
